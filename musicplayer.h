@@ -72,7 +72,7 @@ private:
     QString downloadPath;                                                       //下载存放路径
     int volumeBeforeMute;                                                       //静音前的音量
     QStringList songLrc;                                                        //存歌词
-    QVector<double> songLrcTime;                                                //存歌词时间
+    QVector<int> songLrcTime;                                                //存歌词时间
     int currentLrcLine;
 
     void setSliderValue(int value);
@@ -94,7 +94,6 @@ public slots:
     void updateSlider(qint64);
     void playMediaChanged();
     void loginBtnClicked();
-    void playmusic();
 
 private slots:
     void on_addLocalMusicBtn_clicked();

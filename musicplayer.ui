@@ -113,7 +113,7 @@ background-color: #FFFFFF;
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="searchWidget">
     <widget class="QLineEdit" name="searchText">
@@ -149,6 +149,9 @@ background-color: #FFFFFF;
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="shortcut">
+      <string>Return</string>
      </property>
     </widget>
     <widget class="myListWidget" name="searchResultList">
@@ -254,24 +257,6 @@ QListWidget::Item:selected:active{background:rgb(229, 229, 229);color:#000000;bo
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="playMusic">
-     <property name="geometry">
-      <rect>
-       <x>1020</x>
-       <y>20</y>
-       <width>41</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <underline>true</underline>
-      </font>
-     </property>
-     <property name="text">
-      <string>播放</string>
-     </property>
-    </widget>
    </widget>
   </widget>
   <widget class="QFrame" name="frame">
@@ -309,7 +294,7 @@ QListWidget::Item:selected:active{background:rgb(229, 229, 229);color:#000000;bo
     <property name="geometry">
      <rect>
       <x>560</x>
-      <y>20</y>
+      <y>30</y>
       <width>41</width>
       <height>41</height>
      </rect>
@@ -328,7 +313,7 @@ QListWidget::Item:selected:active{background:rgb(229, 229, 229);color:#000000;bo
     <property name="geometry">
      <rect>
       <x>630</x>
-      <y>20</y>
+      <y>30</y>
       <width>41</width>
       <height>41</height>
      </rect>
@@ -502,7 +487,7 @@ QSlider::handle:Horizontal:hover{
     <property name="geometry">
      <rect>
       <x>700</x>
-      <y>20</y>
+      <y>30</y>
       <width>41</width>
       <height>41</height>
      </rect>
@@ -520,6 +505,11 @@ QSlider::handle:Horizontal:hover{
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -527,10 +517,10 @@ QSlider::handle:Horizontal:hover{
    <widget class="QPushButton" name="muteBtn">
     <property name="geometry">
      <rect>
-      <x>1000</x>
+      <x>1010</x>
       <y>20</y>
-      <width>41</width>
-      <height>41</height>
+      <width>31</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -541,7 +531,7 @@ QSlider::handle:Horizontal:hover{
     <property name="geometry">
      <rect>
       <x>1060</x>
-      <y>30</y>
+      <y>25</y>
       <width>160</width>
       <height>22</height>
      </rect>
@@ -568,6 +558,7 @@ QSlider::handle:Horizontal{
 }
 QSlider::groove:Horizontal:hover{   
 	background: transparent; 
+	border-radius: 4px;
     height:6px;
 
 	
@@ -586,10 +577,10 @@ QSlider::handle:Horizontal:hover{
    <widget class="QPushButton" name="unMuteBtn">
     <property name="geometry">
      <rect>
-      <x>1000</x>
+      <x>1010</x>
       <y>20</y>
-      <width>41</width>
-      <height>41</height>
+      <width>31</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
