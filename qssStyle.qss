@@ -1,0 +1,111 @@
+#MusicPlayer{
+    background-color: rgb(255, 255, 255)
+}
+
+#menu>QPushButton{
+    background-repeat:no-repeat;
+    border:none;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+}
+
+#menu>QPushButton:hover{
+    background-color: rgb(220, 220, 220);
+}
+#menu>QPushButton:checked{
+    background-color: rgb(230, 230, 230);
+}
+
+#menu>QPushButton:pressed{
+    background-color: rgb(210, 210, 210);
+}
+
+
+
+#playMode>QPushButton{
+    background-repeat:no-repeat;
+    border:none;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+#frame>QPushButton{
+    border: 0px;
+    border-radius: 21px;
+}
+#frame>#prevSong{
+    image: url(:/image/prev.png);
+}
+#frame>#prevSong:hover, #frame>#prevSong:pressed{
+    image: url(:/image/prevHover.png);
+}
+
+#frame>#nextSong{
+    image: url(:/image/next.png);
+}
+
+#frame>#nextSong:hover, #frame>#nextSong:pressed{
+    image: url(:/image/nextHover.png);
+}
+
+#frame>#pause:!checked{
+    image: url(:/image/play.png);
+}
+
+#frame>#pause:checked{
+    image: url(:/image/pause.png);
+}
+
+
+
+#playMode>#random{
+    background-image: url(:/image/random.png);
+}
+#playMode>#loop{
+    background-image: url(:/image/loop.png);
+}
+#playMode>#single{
+    background-image: url(:/image/single.png);
+}
+#playMode>#random:checked{
+    background-image: url(:/image/randomSelected.png);
+}
+#playMode>#loop:checked{
+    background-image: url(:/image/loopSelected.png);
+}
+#playMode>#single:checked{
+    background-image: url(:/image/singleSelected.png);
+}
+
+#localListWidget>QPushButton{
+    border: 0px;
+}
+#localListWidget>#addLocalMusicBtn{
+    image: url(:/image/add.png);
+}
+#localListWidget>#addLocalMusicBtn:hover{
+    image: url(:/image/addHover.png);
+}
+
+#searchWidget>#searchBtn{
+    border: 0px;
+    image: url(:/image/search.png);
+}
+#searchWidget>#searchBtn:hover{
+    image: url(:/image/searchHover.png);
+}
+
+#unMuteBtn{
+    image: url(:/image/mute.png);
+}
+
+#unMuteBtn:hover{
+    image: url(:/image/muteHover.png);
+}
+
+#muteBtn{
+    image: url(:/image/unMute.png);
+}
+
+#muteBtn:hover{
+    image: url(:/image/unMuteHover.png);
+}

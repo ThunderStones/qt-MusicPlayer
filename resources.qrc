@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qssStyle.qss</file>
+        <file>image/random.png</file>
+        <file>image/single.png</file>
+        <file>image/loop.png</file>
+        <file>image/randomSelected.png</file>
+        <file>image/singleSelected.png</file>
+        <file>image/loopSelected.png</file>
+        <file>image/play.png</file>
+        <file>image/pause.png</file>
+        <file>image/nextHover.png</file>
+        <file>image/prevHover.png</file>
+        <file>image/next.png</file>
+        <file>image/prev.png</file>
+        <file>image/plusHover.png</file>
+        <file>image/plus.png</file>
+        <file>image/searchHover.png</file>
+        <file>image/search.png</file>
+        <file>image/point.png</file>
+        <file>image/pointL.png</file>
+        <file>image/pointM.png</file>
+        <file>image/unMuteHover.png</file>
+        <file>image/unMute.png</file>
+        <file>image/muteHover.png</file>
+        <file>image/mute.png</file>
+        <file>image/defaultAlbumPic.png</file>
+        <file>image/addHover.png</file>
+        <file>image/add.png</file>
+        <file>image/logo.png</file>
+    </qresource>
+</RCC>
