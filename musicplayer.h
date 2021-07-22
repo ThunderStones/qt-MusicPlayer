@@ -72,8 +72,7 @@ private:
     QString downloadPath;                                                       //下载存放路径
     int volumeBeforeMute;                                                       //静音前的音量
     QStringList songLrc;                                                        //存歌词
-    QVector<int> songLrcTime;                                                //存歌词时间
-    int currentLrcLine;
+    QVector<int> songLrcTime;                                                   //存歌词时间
 
     void setSliderValue(int value);
     void loadLrcFile(QString filePath);

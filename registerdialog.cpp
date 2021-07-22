@@ -7,7 +7,7 @@ registerDialog::registerDialog(QSqlDatabase &db, QWidget *parent) :
 {
     ui->setupUi(this);
     this->db = db;
-
+    this->setWindowTitle("注册");
     createTable();
 }
 

@@ -40,7 +40,6 @@ void MusicPlayer::init()
     ui->volumeSilder->setValue(50);
     musicPlayer->setVolume(50);
     volumeBeforeMute = 50;
-    currentLrcLine = 0;
     ui->unMuteBtn->hide();
 
     //设置按钮hover时的鼠标指针形状为手性
@@ -358,9 +357,6 @@ void MusicPlayer::playMediaChanged()
     QMediaContent currentMedia = currentList->playList->currentMedia();
 
     //获取歌名
-
-
-
 //    int timeTotalLen = static_cast<int>(musicPlayer->duration() / 1000); //当前歌曲长度 单位为秒
     ui->horizontalSlider->setMinimum(0);
     ui->horizontalSlider->setMaximum(timeTotalLen);
@@ -373,7 +369,8 @@ void MusicPlayer::playMediaChanged()
 
 
     QSqlQuery query;
-    query.exec(QString("select songName, picUrl, lrcUrl from songInformation where songUrl = \"%1\"").arg(currentMedia.canonicalUrl().toString().remove("file:///")));
+    query.exec(QString("select songName, picUrl, lrcUrl from songInformation where songUrl = \"%1\"")
+                       .arg(currentMedia.canonicalUrl().toString().remove("file:///")));
     query.next();
 
     QString songName = query.value(0).toString();
@@ -780,6 +777,7 @@ void MusicPlayer::loadLrcFile(QString filePath)
     songLrcTime.clear();
     QFile reader(filePath);
     reader.open(QFile::ReadOnly | QIODevice::Text);
+    //利用正则表达式匹配歌词时间
     QRegExp re("\\[(\\d+):(\\d+).(\\d+)");
     while (!reader.atEnd() && re.isValid()) {
         QString line = reader.readLine();
@@ -794,8 +792,10 @@ void MusicPlayer::loadLrcFile(QString filePath)
         songLrcTime.append(time);
 
     }
-    currentLrcLine = 0;
-    ui->lrcLabel->setText(songLrc.at(currentLrcLine));
+    if (songLrc.size() == 0)
+        ui->lrcLabel->setText("纯音乐");
+    else
+        ui->lrcLabel->setText(songLrc.at(0));
     qDebug() << "加载歌词完成";
 }
 

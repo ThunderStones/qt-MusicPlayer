@@ -308,6 +308,9 @@ QListWidget::Item:selected:active{background:rgb(229, 229, 229);color:#000000;bo
     <property name="text">
      <string/>
     </property>
+    <property name="shortcut">
+     <string>Ctrl+Left</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="pause">
     <property name="geometry">
@@ -323,6 +326,9 @@ QListWidget::Item:selected:active{background:rgb(229, 229, 229);color:#000000;bo
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="shortcut">
+     <string>Backspace</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -494,6 +500,9 @@ QSlider::handle:Horizontal:hover{
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="shortcut">
+     <string>Ctrl+Right</string>
     </property>
    </widget>
    <widget class="QLabel" name="songName">
