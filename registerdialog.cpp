@@ -35,7 +35,7 @@ void registerDialog::createTable()
     }
 }
 
-
+//登录
 void registerDialog::on_regBtn_clicked()
 {
 

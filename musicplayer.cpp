@@ -12,6 +12,41 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     init();
     initDb();
     connectSlot();
+    initShortcut();
+}
+
+
+void MusicPlayer::initShortcut()
+{
+    QShortcut * volumeUp = new QShortcut(this);
+    volumeUp->setKey(Qt::CTRL + Qt::Key_Plus);
+    connect(volumeUp, &QShortcut::activated, this, &MusicPlayer::volumeUp);
+
+    QShortcut * volumeDown = new QShortcut(this);
+    volumeDown->setKey(Qt::CTRL + Qt::Key_Minus);
+    connect(volumeDown, &QShortcut::activated, this, &MusicPlayer::volumeDown);
+
+    QShortcut * volumeDown2 = new QShortcut(this);
+    volumeDown2->setKey(Qt::CTRL + Qt::Key_Equal);
+    connect(volumeDown2, &QShortcut::activated, this, &MusicPlayer::volumeUp);
+}
+
+void MusicPlayer::volumeUp()
+{
+    qDebug() << '+';
+    int currentVolume = ui->volumeSilder->value();
+    currentVolume += 10;
+    currentVolume = std::min(100, currentVolume);
+    ui->volumeSilder->setValue(currentVolume);
+}
+
+void MusicPlayer::volumeDown()
+{
+    qDebug() << '-';
+    int currentVolume = ui->volumeSilder->value();
+    currentVolume -= 10;
+    currentVolume = std::max(0, currentVolume);
+    ui->volumeSilder->setValue(currentVolume);
 }
 
 MusicPlayer::~MusicPlayer()
@@ -39,7 +74,7 @@ void MusicPlayer::init()
     ui->volumeSilder->setMaximum(100);
     ui->volumeSilder->setValue(50);
     musicPlayer->setVolume(50);
-    volumeBeforeMute = 50;
+    currentVolume = 50;
     ui->unMuteBtn->hide();
 
     //设置按钮hover时的鼠标指针形状为手性
@@ -64,14 +99,29 @@ void MusicPlayer::init()
     currentMode = random;
     currentList = localList;
 
+    ui->albumPic->setPixmap(QPixmap(":/image/defaultAlbumPic.png"));
+
     ui->logOutBtn->hide();
     ui->currentTime->setText("00:00");
     ui->totalTime->setText("00:00");
     localList->playList->setPlaybackMode(QMediaPlaylist::Random);
     likeList->playList->setPlaybackMode(QMediaPlaylist::Random);
 
+    ui->localMusicList->setAlternatingRowColors(true);
+    ui->searchResultList->setAlternatingRowColors(true);
+    ui->likeList->setAlternatingRowColors(true);
+
+//    ui->firstWidget_2->addImage(":/image/img1.jpg");
+//    ui->firstWidget_2->addImage(":/image/img2.jpg");
+//    ui->firstWidget_2->startPlay();
+
     spider = new songSpider;
 
+    musicFrom = 0;
+    downloadType = 0;
+
+    downloadLrc = true;
+    downloadCover = true;
 }
 
 //初始化数据库并读取数据，添加到本地播放列表和listWidget中
@@ -96,13 +146,13 @@ void MusicPlayer::initDb()
     else
         qDebug() << "fail to make table1";
 
-    bool success2 = query.exec("create table searchResult"
-                               "(id varchar primary key,"
-                               "songName varchar)");
-    if (success2)
-        qDebug() << "make table2 successful";
-    else
-        qDebug() << "fail to make table2";
+//    bool success2 = query.exec("create table searchResult"
+//                               "(id varchar primary key,"
+//                               "songName varchar)");
+//    if (success2)
+//        qDebug() << "make table2 successful";
+//    else
+//        qDebug() << "fail to make table2";
 
     query.exec("select * from songInformation");
     while (query.next()) {
@@ -161,6 +211,7 @@ bool MusicPlayer::addToLocalPlayList(songInfo * song, bool flag)
     }
 }
 
+//连接信号和槽
 void MusicPlayer::connectSlot()
 {
     connect(musicPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(updateSlider(qint64)));
@@ -183,7 +234,6 @@ void MusicPlayer::connectSlot()
     connect(ui->horizontalSlider, &mySlider::sliderClicked, this, &MusicPlayer::setSliderValue);
 }
 
-
 // 切换到我喜欢页面
 void MusicPlayer::switchLikeWidget()
 {
@@ -203,7 +253,6 @@ void MusicPlayer::on_searchBtn_2_clicked()
     qDebug() << "switch to search widget";
     ui->stackedWidget->setCurrentWidget(ui->searchWidget);
 }
-
 
 //将本地文件添加到列表
 void MusicPlayer::on_addLocalMusicBtn_clicked()
@@ -248,7 +297,6 @@ void MusicPlayer::on_addLocalMusicBtn_clicked()
 
 }
 
-
 //本地音乐的播放按钮，实现音乐播放
 void MusicPlayer::on_playMusic_clicked()
 {
@@ -269,14 +317,13 @@ void MusicPlayer::on_likeList_itemDoubleClicked(QListWidgetItem *item)
     ui->pause->setChecked(false);
 }
 
-
 //双击本地列表播放音乐
 void MusicPlayer::on_localMusicList_itemDoubleClicked(QListWidgetItem *item)
 {
     int i = ui->localMusicList->currentRow();
     currentList = localList;
     qDebug() << "238" << currentList->playList;
-    musicPlayer->setPlaylist(localList->playList);
+    musicPlayer->setPlaylist(localList->playList );
     localList->playList->setCurrentIndex(i);
     musicPlayer->play();
     ui->pause->setChecked(false);
@@ -305,7 +352,8 @@ void MusicPlayer::on_prevSong_clicked()
         currentList->playList->previous();
         currentList->playList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     }
-
+    musicPlayer->play();
+    ui->pause->setChecked(false);
     qDebug() << currentList->playList->currentIndex();
 }
 
@@ -323,6 +371,8 @@ void MusicPlayer::on_nextSong_clicked()
         currentList->playList->next();
         currentList->playList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     }
+    musicPlayer->play();
+    ui->pause->setChecked(false);
 }
 
 //随音乐播放更新进度条
@@ -349,8 +399,6 @@ void MusicPlayer::playMediaChanged()
     int timeTotalLen = (musicPlayer->metaData("Duration")).toInt();
 //    qDebug() << "调用playMediaChanged" << timeTotalLen;
     if (timeTotalLen == 0) {
-//        QMessageBox::information(this, "无法解析", "缺少解码器，无法解析该文件。");
-//        ui->songName->setText(QString("无法解析"));
         return;
     }
     int timeTotalInt = static_cast<int>(timeTotalLen);
@@ -382,7 +430,9 @@ void MusicPlayer::playMediaChanged()
     QString picUrl = query.value(1).toString();
     QString lrcUrl = query.value(2).toString();
     if (picUrl.isEmpty())
+    {
         ui->albumPic->setPixmap(QPixmap(":/image/defaultAlbumPic.png"));
+    }
     else {
         QImage pic(picUrl);
         pic.scaled(101, 101);
@@ -396,19 +446,27 @@ void MusicPlayer::playMediaChanged()
     } else {
         loadLrcFile(lrcUrl);
     }
+    QFont font = ui->localMusicList->currentItem()->font();
+    font.setBold(false);
+    for (int i = 0; i < ui->localMusicList->count(); i++) {
+        ui->localMusicList->item(i)->setFont(font);
+        ui->localMusicList->item(i)->setTextColor(QColor(0, 0, 0));
+    }
 
+    font.setBold(true);
+    ui->localMusicList->currentItem()->setFont(font);
+    ui->localMusicList->currentItem()->setTextColor(QColor(40, 57, 215));
 }
-
 
 // 登录状态改变
 void MusicPlayer::loginStatusChanged(bool logined)
 {
     if (logined) {
-        ui->loginBtn->hide();
+        ui->loginBtn->setEnabled(false);
         ui->logOutBtn->show();
         ui->userNickName->setText(userInfo->nickName);
     } else {
-        ui->loginBtn->show();
+        ui->loginBtn->setEnabled(true);
         ui->logOutBtn->hide();
         ui->userNickName->setText("请登录");
         ui->likeList->clear();
@@ -417,7 +475,6 @@ void MusicPlayer::loginStatusChanged(bool logined)
             qDebug() << "354" << currentList->playList;
     }
 }
-
 
 //从数据库读取用户信息 添加用户喜爱音乐
 void MusicPlayer::readUserInfo(QString userName)
@@ -598,22 +655,43 @@ void MusicPlayer::dealActionFromList(myListWidget * list, myListWidget::actionTy
     {
         QString songName = ui->searchResultList->currentItem()->text();
         QSqlQuery query;
-        query.exec(QString("select id from searchResult where songName = \"%1\"").arg(songName));
-        query.next();
-        QString songId = query.value(0).toString();
-
-        if (downloadPath == nullptr)
-            on_downloadPath_clicked();
-
         query.exec(QString("select songUrl from songInformation where songName = \"%1\"").arg(songName));
         query.next();
         if (query.isValid()) {
             QMessageBox::information(this, "提示", "该歌曲已下载");
             return;
         }
-        QString songUrl = spider->downloadSong(songId, downloadPath, songName);
-        QString lrcUrl = spider->downloadLrc(songId, downloadPath, songName);
-        QString picUrl = spider->downloadPic(songId, downloadPath, songName);
+        QString songUrl, lrcUrl, picUrl;
+        if (downloadPath == nullptr)
+            on_downloadPath_clicked();
+        query.exec(QString("select * from searchResult where songName = \"%1\"").arg(songName));
+        query.next();
+        if (!query.value(2).isValid()) {
+            QString songId = query.value(0).toString();
+
+
+
+
+            songUrl = spider->downloadNetSong(songId, downloadPath, songName);
+            lrcUrl = downloadLrc ? spider->downloadNetLrc(songId, downloadPath, songName) : "";
+            picUrl = downloadCover ? spider->downloadNetPic(songId, downloadPath, songName) : "";
+        }
+        else {
+            QString hashValue = query.value(0).toString();
+            QString albumId = query.value(2).toString();
+            QStringList songData = spider->getKugouSongInfo(hashValue, albumId);
+            qDebug() << songData;
+            if (songData.size() == 1){
+                QMessageBox::information(this, "提示", "下载失败。");
+                return;
+            }
+            lrcUrl = downloadPath + QString("/") + songName;
+            QFile lrcWriter(lrcUrl);
+            lrcWriter.open(QFile::WriteOnly);
+            lrcWriter.write(songData.at(1).toUtf8());
+            lrcWriter.close();
+            picUrl = spider->downloadKugouPic(songData.at(2), downloadPath, songName);
+        }
         songInfo * song = new songInfo{++songInDbCount, songName, "", songUrl, picUrl, lrcUrl};
         addToLocalPlayList(song, false);
         QMessageBox::information(this, "提示", QString("下载成功，%1已添加到本地列表。").arg(songName));
@@ -624,8 +702,6 @@ void MusicPlayer::dealActionFromList(myListWidget * list, myListWidget::actionTy
     }
     }
 }
-
-
 
 //绘制列表右键菜单
 void MusicPlayer::paintMenu(myListWidget * list)
@@ -679,66 +755,108 @@ QString MusicPlayer::getIdFromDb(QString songName)
 }
 
 //解析get到的Json数据并存到数据库中，
-void MusicPlayer::parseJson(QByteArray jsonData)
+void MusicPlayer::parseJson(QByteArray jsonData, songSpider::sourse sourseType)
 {
+    switch(sourseType){
+    case songSpider::netEase:
+    {
+        QJsonParseError jsonError;
+        QJsonDocument doc = QJsonDocument::fromJson(jsonData, &jsonError);
+        if (doc.isNull() || jsonError.error != QJsonParseError::NoError) {
+            qDebug() << "parse Json Error1" << jsonError.error;
+            return;
+        }
 
-    QJsonParseError jsonError;
-    QJsonDocument doc = QJsonDocument::fromJson(jsonData, &jsonError);
-    if (doc.isNull() || jsonError.error != QJsonParseError::NoError) {
-        qDebug() << "parse Json Error" << jsonError.error;
-        return;
+        ui->searchResultList->clear();
+
+        QSqlQuery query;
+        qDebug() << query.exec("drop table songInfo.searchResult");
+        qDebug() << query.exec("create table searchResult"
+                   "(id varchar primary key,"
+                   "songName varchar)");
+        QJsonArray songInfoArray = doc.object().value("result").toObject().value("songs").toArray();
+        if (songInfoArray.size() == 0){
+            QMessageBox::information(this, "提示", "未搜索到相关歌曲，请更换关键词或检查网络");
+            return;
+        }
+        for (int i = 0; i < songInfoArray.size(); i++) {
+            int feeFlag = songInfoArray.at(i).toObject().value("fee").toInt();
+            if (feeFlag != 0 && feeFlag != 8)
+                continue;
+            QString id = songInfoArray.at(i)
+                    .toObject()
+                    .value("id")
+                    .toVariant()
+                    .toString();
+
+            QString songName = songInfoArray.at(i)
+                    .toObject()
+                    .value("name")
+                    .toString()
+                    + "-" +
+                    songInfoArray.at(i)
+                    .toObject()
+                    .value("artists")
+                    .toArray()
+                    .at(0)
+                    .toObject()
+                    .value("name")
+                    .toString();
+            qDebug() << id <<songName;
+            query.exec(QString("insert into searchResult values(\"%1\",\"%2\")").arg(id, songName));
+
+            ui->searchResultList->addItem(songName);
+        }
+        break;
     }
+    case songSpider::kugou:
+    {
+        QJsonParseError jsonError;
+        QJsonDocument doc = QJsonDocument::fromJson(jsonData, &jsonError);
+        if (doc.isNull() || jsonError.error != QJsonParseError::NoError) {
+            qDebug() << "parse Json Error2" << jsonError.error;
+            return;
+        }
 
-    ui->searchResultList->clear();
+        ui->searchResultList->clear();
 
-    QSqlQuery query;
-    query.exec("delete from searchResult");
-    QJsonArray songInfoArray = doc.object().value("result").toObject().value("songs").toArray();
-    if (songInfoArray.size() == 0){
-        QMessageBox::information(this, "提示", "未搜索到相关歌曲，请更换关键词或检查网络");
-        return;
+        QSqlQuery query;
+        qDebug() << query.exec("drop table songInfo.searchResult");
+        qDebug() << query.exec("create table searchResult"
+                   "(hash varchar primary key,"
+                   "songName varchar,"
+                   "albumId varchar)");
+        qDebug() << "db for kugou";
+        QJsonArray songInfoArray = doc.object().value("data").toObject().value("info").toArray();
+        for (int i = 0; i < songInfoArray.size(); i++) {
+            QJsonObject each = songInfoArray.at(i).toObject();
+            QString songHash = each.value("hash").toString();
+            QString songName = each.value("songname").toString() + QString("-") + each.value("singername").toString();
+            songName.remove("<em>").remove("</em>");
+            QString albumId = each.value("album_id").toString();
+            query.exec(QString("insert into searchResult values(\"%1\",\"%2\",\"%3\")").arg(songHash, songName, albumId));
+            ui->searchResultList->addItem(songName);
+        }
     }
-    for (int i = 0; i < songInfoArray.size(); i++) {
-        int feeFlag = songInfoArray.at(i).toObject().value("fee").toInt();
-        if (feeFlag != 0 && feeFlag != 8)
-            continue;
-        QString id = songInfoArray.at(i)
-                                  .toObject()
-                                  .value("id")
-                                  .toVariant()
-                                  .toString();
-
-        QString songName = songInfoArray.at(i)
-                                        .toObject()
-                                        .value("name")
-                                        .toString()
-                                        + "-" +
-                           songInfoArray.at(i)
-                                        .toObject()
-                                        .value("artists")
-                                        .toArray()
-                                        .at(0)
-                                        .toObject()
-                                        .value("name")
-                                        .toString();
-        qDebug() << id <<songName;
-        query.exec(QString("insert into searchResult values(\"%1\",\"%2\")").arg(id, songName));
-
-        ui->searchResultList->addItem(songName);
     }
-
-
 }
 
 //点击搜索按钮
 void MusicPlayer::on_searchBtn_clicked()
 {
     if (ui->searchText->text().isEmpty()) {
-        QMessageBox::information(this, "提示", "请输入关键字");
+        QByteArray res = spider->sendHTTPRequest(ui->searchText->placeholderText(), songSpider::netEase);
+        parseJson(res, songSpider::netEase);
         return;
     }
-    QByteArray res = spider->sendHTTPPost(ui->searchText->text());
-    parseJson(res);
+    if (!musicFrom) {
+        QByteArray res = spider->sendHTTPRequest(ui->searchText->text(), songSpider::netEase);
+        parseJson(res, songSpider::netEase);
+    }
+    else {
+        QByteArray res = spider->sendHTTPRequest(ui->searchText->text(), songSpider::kugou);
+        parseJson(res, songSpider::kugou);
+    }
 
 }
 
@@ -755,7 +873,7 @@ void MusicPlayer::on_muteBtn_clicked()
 {
     ui->muteBtn->hide();
     ui->unMuteBtn->show();
-    volumeBeforeMute = ui->volumeSilder->value();
+    currentVolume = ui->volumeSilder->value();
     ui->volumeSilder->setValue(0);
     musicPlayer->setMuted(true);
 }
@@ -765,7 +883,7 @@ void MusicPlayer::on_unMuteBtn_clicked()
 {
     ui->muteBtn->show();
     ui->unMuteBtn->hide();
-    ui->volumeSilder->setValue(volumeBeforeMute);
+    ui->volumeSilder->setValue(currentVolume);
     musicPlayer->setMuted(false);
 
 }
@@ -827,4 +945,50 @@ void MusicPlayer::on_volumeSilder_valueChanged(int value)
 void MusicPlayer::setSliderValue(int value)
 {
     musicPlayer->setPosition(value);
+}
+
+void MusicPlayer::on_downloadWidgetBtn_clicked()
+{
+}
+
+void MusicPlayer::on_netEase_toggled(bool checked)
+{
+    if (checked)
+        musicFrom = false;
+    else
+        musicFrom = true;
+
+    qDebug() << checked << musicFrom;
+}
+
+void MusicPlayer::on_singleSong_toggled(bool checked)
+{
+    if (checked)
+        downloadType = false;
+    else
+        downloadType = true;
+}
+
+void MusicPlayer::on_changePathBtn_clicked()
+{
+    on_downloadPath_clicked();
+}
+
+void MusicPlayer::on_downloadLrc_stateChanged(int arg1)
+{
+    downloadLrc = arg1;
+}
+
+void MusicPlayer::on_downloadCover_stateChanged(int arg1)
+{
+    downloadCover = arg1;
+}
+
+void MusicPlayer::on_firstWidgetBtn_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->firstWidget);
+}
+
+void MusicPlayer::on_pushButton_clicked()
+{
 }

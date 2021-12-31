@@ -3,21 +3,23 @@
 }
 
 #menu>QPushButton{
+    font-size: 16px;
     background-repeat:no-repeat;
     border:none;
-    background-color: rgb(255, 255, 255);
+    border-radius: 8px;
+    background-color: #ffffff;
     color: rgb(0, 0, 0);
 }
 
 #menu>QPushButton:hover{
-    background-color: rgb(220, 220, 220);
+    background-color: rgb(204, 228, 247);
 }
 #menu>QPushButton:checked{
-    background-color: rgb(230, 230, 230);
+    background-color: rgb(179, 223, 254);
 }
 
 #menu>QPushButton:pressed{
-    background-color: rgb(210, 210, 210);
+    background-color: rgb(102, 190, 252);
 }
 
 
@@ -86,11 +88,11 @@
     image: url(:/image/addHover.png);
 }
 
-#searchWidget>#searchBtn{
+#searchBtn, #searchBtn_3{
     border: 0px;
     image: url(:/image/search.png);
 }
-#searchWidget>#searchBtn:hover{
+#searchBtn:hover, #searchBtn_3:hover{
     image: url(:/image/searchHover.png);
 }
 
@@ -162,3 +164,25 @@ QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical
     background:rgba(0,0,0,10%);
     border-radius:4px;
 }
+
+#pushButton{
+    border: 0px solid;
+    background-image: url(:/image/qq.png);
+}
+
+#pushButton:hover{
+    background-image: url(:/image/qq-hover.png);
+}
+
+#pushButton_2{
+    border: 0px solid;
+    background-image: url(:/image/wechat.png);
+}
+
+#pushButton_2:hover{
+    background-image: url(:/image/wechat-hover.png);
+}
+#login{
+    background-color: #ffffff;
+}
+

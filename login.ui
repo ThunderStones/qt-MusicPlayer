@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>470</width>
-    <height>309</height>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>120</x>
-     <y>160</y>
+     <y>190</y>
      <width>221</width>
      <height>41</height>
     </rect>
@@ -29,10 +29,14 @@
    </property>
    <property name="styleSheet">
     <string notr="true">#loginBtn{
-	background-color: rgb(52, 160, 223);
+	background-color: rgb(102, 190, 252);
 	border: 0px;
 	border-radius: 10px;
-	color: #ffffff;
+
+}
+
+#loginBtn:hover{
+	background-color: rgb(52, 160, 223);
 }</string>
    </property>
    <property name="text">
@@ -45,9 +49,9 @@
   <widget class="QPushButton" name="registerBtn">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>130</x>
      <y>240</y>
-     <width>61</width>
+     <width>201</width>
      <height>31</height>
     </rect>
    </property>
@@ -60,10 +64,14 @@
    <property name="styleSheet">
     <string notr="true">#registerBtn{
 	border: 0px;
+}
+#registerBtn:hover{
+	border: 0px;
+	color: rgb(52, 160, 223);
 }</string>
    </property>
    <property name="text">
-    <string>注册</string>
+    <string>还没有账户？马上注册</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
@@ -73,7 +81,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>50</y>
+     <y>80</y>
      <width>281</width>
      <height>41</height>
     </rect>
@@ -85,8 +93,12 @@
    </property>
    <property name="styleSheet">
     <string notr="true">#userNameText{
-	border: 0px;
-	border-radius: 10px; 
+	border: 1px solid gray;
+	border-radius: 20px; 
+}
+#userNameText:focus{
+	border: 1px solid blue;
+	border-radius: 20px; 
 }</string>
    </property>
    <property name="inputMethodHints">
@@ -99,14 +111,14 @@
     <set>Qt::AlignCenter</set>
    </property>
    <property name="placeholderText">
-    <string>输入用户名</string>
+    <string>用户名</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="passwordText">
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>100</y>
+     <y>130</y>
      <width>281</width>
      <height>41</height>
     </rect>
@@ -118,9 +130,15 @@
    </property>
    <property name="styleSheet">
     <string notr="true">#passwordText{
-	border: 0px;
-	border-radius: 10px; 
-}</string>
+	border: 1px solid gray;
+	border-radius: 20px; 
+}
+
+#passwordText:focus {
+	border: 1px solid blue;
+	border-radius: 20px; 
+}
+</string>
    </property>
    <property name="inputMethodHints">
     <set>Qt::ImhDigitsOnly|Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
@@ -132,7 +150,33 @@
     <set>Qt::AlignCenter</set>
    </property>
    <property name="placeholderText">
-    <string>输入密码</string>
+    <string>密码</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>300</y>
+     <width>46</width>
+     <height>46</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>300</y>
+     <width>46</width>
+     <height>46</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

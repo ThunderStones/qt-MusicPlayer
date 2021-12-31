@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>478</width>
-    <height>303</height>
+    <height>360</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,20 +24,29 @@
 #regBtn{
 	border: 0px;
 	border-radius: 10px;
-	background-color: rgb(161, 161, 255);
+	background-color: rgb(102, 190, 252);
 }
 #regBtn:hover{
-	background-color: rgb(120, 129, 255);
+	background-color: rgb(52, 160, 223);
 }
-#regBtn:pressed{
-background-color: rgb(97, 92, 255);
+
+#registerDialog{
+	background-color: white;
+}
+
+#registerDialog QLineEdit{
+	border: 1px solid grey;
+	border-radius: 20px;
+}
+#registerDialog QLineEdit:focus{
+	border: 1px solid blue;
 }</string>
   </property>
   <widget class="QPushButton" name="regBtn">
    <property name="geometry">
     <rect>
      <x>145</x>
-     <y>210</y>
+     <y>220</y>
      <width>171</width>
      <height>41</height>
     </rect>
@@ -52,6 +61,9 @@ background-color: rgb(97, 92, 255);
    </property>
    <property name="text">
     <string>注册</string>
+   </property>
+   <property name="shortcut">
+    <string>Return</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="nickName">
@@ -69,10 +81,7 @@ background-color: rgb(97, 92, 255);
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">#nickName{
-	border: 0px;
-	border-radius: 10px;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -102,10 +111,7 @@ background-color: rgb(97, 92, 255);
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;a&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">#userName{
-	border: 0px;
-	border-radius: 10px;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="inputMethodHints">
     <set>Qt::ImhDigitsOnly|Qt::ImhLatinOnly</set>
@@ -132,10 +138,7 @@ background-color: rgb(97, 92, 255);
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">#password{
-	border: 0px;
-	border-radius: 10px;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="inputMethodHints">
     <set>Qt::ImhDigitsOnly|Qt::ImhHiddenText|Qt::ImhLatinOnly|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
@@ -148,6 +151,32 @@ background-color: rgb(97, 92, 255);
    </property>
    <property name="placeholderText">
     <string>密码</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>280</y>
+     <width>46</width>
+     <height>46</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>280</y>
+     <width>46</width>
+     <height>46</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

@@ -28,5 +28,12 @@
         <file>image/addHover.png</file>
         <file>image/add.png</file>
         <file>image/logo.png</file>
+        <file>image/wechat.png</file>
+        <file>image/qq-hover.png</file>
+        <file>image/qq.png</file>
+        <file>image/wechat-hover.png</file>
+        <file>image/user.png</file>
+        <file>image/img2.jpg</file>
+        <file>image/img1.jpg</file>
     </qresource>
 </RCC>

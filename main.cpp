@@ -14,9 +14,9 @@ int main(int argc, char *argv[])
         a.setStyleSheet(qssStrint);
     }
     w.show();
-//    qDebug()<<QSslSocket::sslLibraryBuildVersionString();
-//    qDebug()<<"QSslSocket="<<QSslSocket::sslLibraryBuildVersionString();
-//    qDebug() << "OpenSSL支持情况:" << QSslSocket::supportsSsl();
+    qDebug()<<QSslSocket::sslLibraryBuildVersionString();
+    qDebug()<<"QSslSocket="<<QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << "OpenSSL支持情况:" << QSslSocket::supportsSsl();
 
 
     return a.exec();

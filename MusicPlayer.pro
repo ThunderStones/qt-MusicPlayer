@@ -31,7 +31,8 @@ SOURCES += \
     login.cpp \
     registerdialog.cpp \
     songspider.cpp \
-    myslider.cpp
+    myslider.cpp \
+    carouselimagewindow.cpp
 
 HEADERS += \
     musicplayer.h \
@@ -39,7 +40,8 @@ HEADERS += \
     login.h \
     registerdialog.h \
     songspider.h \
-    myslider.h
+    myslider.h \
+    carouselimagewindow.h
 
 FORMS += \
         musicplayer.ui \
